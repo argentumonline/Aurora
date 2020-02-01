@@ -74,7 +74,7 @@ namespace Aurora::Graphic::Detail::Direct3D11
 
         struct D3D11Texture
         {
-            ID3D11Texture2D 		 * mTexture;
+            ID3D11Texture2D          * mTexture;
             ID3D11ShaderResourceView * mResource;
         };
 
@@ -91,13 +91,13 @@ namespace Aurora::Graphic::Detail::Direct3D11
             ID3D11DepthStencilState  * mDS;
             ID3D11RasterizerState    * mRS;
             ID3D11InputLayout        * mIL;
-            UInt32					   mIS;
+            UInt32                     mIS;
             D3D11_PRIMITIVE_TOPOLOGY   mTS;
         };
 
         struct D3D11Pass
         {
-            IDXGISwapChain			 * mWindow;
+            IDXGISwapChain           * mWindow;
             ID3D11RenderTargetView   * mColorAttachment[kMaxDrawColor];
             ID3D11DepthStencilView   * mDepthAttachment;
         };
@@ -119,14 +119,14 @@ namespace Aurora::Graphic::Detail::Direct3D11
 
         ID3D11Device1        * mDevice;
         ID3D11DeviceContext1 * mDeviceContext;
-        IDXGIFactory1 		 * mFactory;
+        IDXGIFactory1        * mFactory;
         IDXGISwapChain       * mQueue[kMaxCachePass];
         UInt32                 mQueueQuantity;
         D3D11Buffer            mListBuffer[kMaxCacheBuffer];
-        D3D11Descriptor	       mListDescriptor[kMaxCacheDescriptor];
-        D3D11Pass		       mListPass[kMaxCachePass];
-        D3D11Pipeline	       mListPipeline[kMaxCachePipeline];
+        D3D11Descriptor        mListDescriptor[kMaxCacheDescriptor];
+        D3D11Pass              mListPass[kMaxCachePass];
+        D3D11Pipeline          mListPipeline[kMaxCachePipeline];
         D3D11Sampler           mListSampler[kMaxCacheSampler];
-        D3D11Texture	       mListTexture[kMaxCacheTexture];
+        D3D11Texture           mListTexture[kMaxCacheTexture];
     };
 }
