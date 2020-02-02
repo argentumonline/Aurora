@@ -633,6 +633,8 @@ namespace Aurora::Graphic::Detail::Direct3D11
         info.BufferDesc.Height      = height;
         info.SampleDesc             = { 1, 0 };
         info.BufferDesc.RefreshRate = { 1, 60 };
+        info.OutputWindow           = reinterpret_cast<HWND>(window);
+        info.Windowed               = true;
         info.SwapEffect = IsWindows10OrGreater() ? DXGI_SWAP_EFFECT_FLIP_DISCARD : DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL;
 
         if (FAILED(mFactory->CreateSwapChain(mDevice, & info, & wrapper.mWindow)))
@@ -718,7 +720,9 @@ namespace Aurora::Graphic::Detail::Direct3D11
         {
             D3D11_DEPTH_STENCIL_DESC Description = CD3D11_DEPTH_STENCIL_DESC(CD3D11_DEFAULT());
 
-            Description.DepthEnable                  = (states.mDepthCondition != TestCondition::Always);
+            Description.DepthEnable                  = (
+                       states.mDepthCondition != TestCondition::Always
+                    || states.mDepthMask      != false);
             Description.DepthFunc                    = _As(states.mDepthCondition);
             Description.DepthWriteMask               = static_cast<D3D11_DEPTH_WRITE_MASK>(states.mDepthMask);
             Description.StencilEnable                = (
@@ -743,6 +747,7 @@ namespace Aurora::Graphic::Detail::Direct3D11
         if (SUCCEEDED(error))
         {
             D3D11_RASTERIZER_DESC description = CD3D11_RASTERIZER_DESC(CD3D11_DEFAULT());
+            description.CullMode = D3D11_CULL_NONE;
             description.MultisampleEnable = true;
             description.ScissorEnable     = true;
 
@@ -1002,6 +1007,14 @@ namespace Aurora::Graphic::Detail::Direct3D11
                 if (prev.mRS != next.mRS)
                 {
                     mDeviceContext->RSSetState(next.mRS);
+                }
+                if (prev.mIL != next.mIL)
+                {
+                    mDeviceContext->IASetInputLayout(next.mIL);
+                }
+                if (prev.mTS != next.mTS)
+                {
+                    mDeviceContext->IASetPrimitiveTopology(next.mTS);
                 }
             }
             else if (cache.mStencil != current.mStencil)
